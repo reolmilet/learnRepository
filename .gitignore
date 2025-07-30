@@ -1,0 +1,12 @@
+// 在项目根目录创建或修改 .gitignore 文件
+{
+  "node_modules/",
+  "package-lock.json",
+  "yarn.lock",
+  "*.log",
+  ".env",
+  "dist/",
+  "build/"
+}
+
+node_modules

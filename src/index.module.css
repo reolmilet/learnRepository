@@ -1,0 +1,24 @@
+/* 在样式文件中添加 */
+.scoreContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+
+.numerator {
+  font-size: 1.2em;
+  margin-bottom: 2px;
+}
+
+.divider {
+  width: 20px;
+  height: 1px;
+  background-color: currentColor;
+  margin: 2px 0;
+}
+
+.denominator {
+  font-size: 0.9em;
+  margin-top: 2px;
+}
