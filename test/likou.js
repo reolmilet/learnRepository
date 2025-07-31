@@ -348,4 +348,34 @@ var maxSubArray = function (nums) {
 
   console.log(sumNums);
 };
-console.log(maxSubArray([-2, 1, -3, 4, -1, 2, 1, -5, 4]));
+// console.log(maxSubArray([-2, 1, -3, 4, -1, 2, 1, -5, 4]));
+
+/**
+ * 56. 合并区间
+ * @param {number[][]} intervals
+ * @return {number[][]}
+ */
+var merge = function (intervals) {
+  intervals.sort((a, b) => a[0] - b[0]);
+  let pre = intervals[0];
+  let res = [];
+  for (let i = 1; i < intervals.length; i++) {
+    const cur = intervals[i];
+    if (pre[1] >= cur[0]) {
+      pre[1] = Math.max(pre[1], cur[1]);
+    } else {
+      res.push(pre);
+      pre = cur;
+    }
+  }
+  res.push(pre);
+  return res;
+};
+console.log(
+  merge([
+    [1, 3],
+    [2, 6],
+    [8, 10],
+    [15, 18],
+  ])
+);
