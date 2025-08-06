@@ -371,11 +371,119 @@ var merge = function (intervals) {
   res.push(pre);
   return res;
 };
+// console.log(
+//   merge([
+//     [1, 3],
+//     [2, 6],
+//     [8, 10],
+//     [15, 18],
+//   ])
+// );
+
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {void} Do not return anything, modify nums in-place instead.
+ * 189. 轮转数组
+ */
+var rotate = function (nums, k) {
+  const len = nums.length;
+  const right = k % len;
+  const leftnums = nums.slice(0, len - right);
+  const rightnums = nums.slice(len - right, len);
+  // 清空原数组并插入旋转后的元素（原地修改）
+  nums.length = 0;
+  nums.push(...rightnums, ...leftnums);
+};
+
+/**
+ * @param {number[]} nums
+ * @return {number[]}
+ * 
+238. 除自身以外数组的乘积
+ */
+var productExceptSelf = function (nums) {
+  const answer = [];
+  left = [1];
+  right = [];
+  right[nums.length - 1] = 1;
+  for (let i = 1; i < nums.length; i++) {
+    left[i] = nums[i - 1] * left[i - 1];
+  }
+  for (let i = nums.length - 2; i >= 0; i--) {
+    right[i] = nums[i + 1] * right[i + 1];
+  }
+  for (let i = 0; i < nums.length; i++) {
+    answer[i] = left[i] * right[i];
+  }
+  return answer;
+};
+// console.log(productExceptSelf([1, 2, 3, 4]));
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ * 41. 缺失的第一个正数
+ */
+var firstMissingPositive = function (nums) {
+  const n = nums.length;
+  for (let i = 0; i < n; i++) {
+    // 如果当前学生的学号在 [1,n] 中，但（真身）没有坐在正确的座位上
+    while (1 <= nums[i] && nums[i] <= n && nums[i] !== nums[nums[i] - 1]) {
+      // 那么就交换 nums[i] 和 nums[j]，其中 j 是 i 的学号
+      const j = nums[i] - 1; // 减一是因为数组下标从 0 开始
+      [nums[i], nums[j]] = [nums[j], nums[i]];
+    }
+  }
+
+  // 找第一个学号与座位编号不匹配的学生
+  for (let i = 0; i < n; i++) {
+    if (nums[i] !== i + 1) {
+      return i + 1;
+    }
+  }
+
+  // 所有学生都坐在正确的座位上
+  return n + 1;
+};
+
+// console.log(firstMissingPositive([1, 2, 0]));
+
+/**
+ * @param {number[][]} matrix
+ * @return {void} Do not return anything, modify matrix in-place instead.
+ * 73. 矩阵置零
+ */
+var setZeroes = function (matrix) {
+  const iarr = [];
+  const jarr = [];
+  for (let i = 0; i < matrix.length; i++) {
+    for (let j = 0; j < matrix[i].length; j++) {
+      if (matrix[i][j] === 0) {
+        iarr.push(i);
+        jarr.push(j);
+      }
+    }
+  }
+  for (let i = 0; i < matrix.length; i++) {
+    if (iarr.some((element) => element === i)) {
+      matrix[i] = new Array(matrix[i].length).fill(0);
+      continue;
+    }
+
+    for (let j = 0; j < matrix[i].length; j++) {
+      if (jarr.some((element) => element === j)) {
+        matrix[i][j] = 0;
+      }
+    }
+  }
+  return matrix;
+};
+
 console.log(
-  merge([
-    [1, 3],
-    [2, 6],
-    [8, 10],
-    [15, 18],
+  setZeroes([
+    [0, 1, 2, 0],
+    [3, 4, 5, 2],
+    [1, 3, 1, 5],
   ])
 );
