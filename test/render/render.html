@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script>
+      function reactRender(vnode) {
+        if (!vnode) {
+          return;
+        }
+        let dom = document.createElement(vnode.tag.toLowerCase());
+        if (vnode.attrs) {
+          Object.keys(vnode.attrs).forEach((key) => {
+            dom.setAttribute(key, vnode.attrs[key]);
+          });
+        }
+        if (vnode.children) {
+          vnode.children.forEach((child) => {
+            const childDom = reactRender(child);
+            if (childDom) {
+              dom.appendChild(childDom);
+            }
+          });
+        }
+        return dom;
+      }
+      const dom = reactRender({
+        tag: "DIV",
+        attrs: {
+          id: "app",
+        },
+        children: [
+          {
+            tag: "SPAN",
+            children: [{ tag: "A", children: [] }],
+          },
+          {
+            tag: "SPAN",
+            children: [
+              { tag: "A", children: [] },
+              { tag: "A", children: [] },
+            ],
+          },
+        ],
+      });
+      document.body.appendChild(dom);
+      var a = 3;
+      const test = () => {
+        var a = 1;
+        console.log(window);
+        console.log(a, window.a);
+        if (true) {
+          console.log(a, window.a);
+          a = 11;
+          console.log(a, window.a);
+          function a() {}
+          a = 22;
+          console.log(a, window.a);
+        }
+        console.log(a, window.a, 11111);
+      };
+      test();
+    </script>
+  </body>
+</html>

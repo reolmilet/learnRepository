@@ -480,10 +480,59 @@ var setZeroes = function (matrix) {
   return matrix;
 };
 
+// console.log(
+//   setZeroes([
+//     [0, 1, 2, 0],
+//     [3, 4, 5, 2],
+//     [1, 3, 1, 5],
+//   ])
+// );
+/**
+ *
+ * @param {*} matrix
+ * @param {*} target
+ * @returns
+ * 240. 搜索二维矩阵 II
+ * 二分矩阵
+ *
+ */
+
+var searchMatrix = function (matrix, target) {
+  for (const row of matrix) {
+    const index = search(row, target);
+    if (index >= 0) {
+      return true;
+    }
+  }
+  return false;
+};
+
+const search = (nums, target) => {
+  let low = 0,
+    high = nums.length - 1;
+  while (low <= high) {
+    const mid = Math.floor((high - low) / 2) + low;
+    const num = nums[mid];
+    if (num === target) {
+      return mid;
+    } else if (num > target) {
+      high = mid - 1;
+    } else {
+      low = mid + 1;
+    }
+  }
+  return -1;
+};
+
 console.log(
-  setZeroes([
-    [0, 1, 2, 0],
-    [3, 4, 5, 2],
-    [1, 3, 1, 5],
-  ])
+  searchMatrix(
+    (matrix = [
+      [1, 4, 7, 11, 15],
+      [2, 5, 8, 12, 19],
+      [3, 6, 9, 16, 22],
+      [10, 13, 14, 17, 24],
+      [18, 21, 23, 26, 30],
+    ]),
+    5
+  )
 );

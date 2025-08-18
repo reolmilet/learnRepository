@@ -21,8 +21,9 @@ function strAdd(str1, str2) {
   }
   return result.join("");
 }
-console.log(strAdd("11", "99"));
+// console.log(strAdd("11", "99"));
 // output: '2'
 // input: strAdd('11', '99')
 // output: '110'
 // input: strAdd('11', '999999999999999999')
+
