@@ -111,7 +111,7 @@ function Person() {}
 
 // call bind apply
 Function.prototype._mycall = function (content, ...arrs) {
-  console.log(this, "this");
+  // console.log(this, "this");
   content.fn = this;
   const res = content.fn(...arrs);
   delete content.fn;
@@ -144,7 +144,7 @@ function Food(name, price) {
   this.category = "food";
 }
 
-console.log(new Food("cheese", 5).name);
+// console.log(new Food("cheese", 5).name);
 // Expected output: "cheese"
 
 // 微派面试
@@ -200,7 +200,7 @@ Array.prototype.mymap = function (callback) {
 };
 // console.log([2, 4, 66, 7, , , ,].mymap((item) => item * 2));
 
-//
+//获取路径
 function _get(obj, path, defaultValue = "undefined") {
   //先将path处理成统一格式
   let newPath = [];
@@ -222,11 +222,156 @@ function _get(obj, path, defaultValue = "undefined") {
 
 var object = { a: [{ b: { c: 3 } }, { d: { e: 4 } }] };
 
-console.log(_get(object, "a[1].d.e"));
-// => 3
+// console.log(_get(object, "a[1].d.e"));
+// // => 3
 
-console.log(_get(object, ["a", "0", "b", "c"]));
-// => 3
+// console.log(_get(object, ["a", "0", "b", "c"]));
+// // => 3
 
-console.log(_get(object, "a.b.c", "default"));
-// => 'default'
+// console.log(_get(object, "a.b.c", "default"));
+// // => 'default'
+// 深拷贝
+const deepCopy = (obj) => {
+  if (typeof obj !== "object" || obj === null) {
+    return obj;
+  }
+  let newObj = {};
+  Object.keys(obj).forEach((key) => {
+    if (typeof obj[key] === "object") {
+      newObj[key] = deepCopy(obj[key]);
+    } else {
+      newObj[key] = obj[key];
+    }
+  });
+  return newObj;
+};
+const reduceDeepCopy = (obj) => {
+  if (typeof obj !== "object" || obj === null) {
+    return obj;
+  }
+  if (typeof obj !== "object" || obj === null) {
+    return obj;
+  }
+
+  const newObj = Array.isArray(obj) ? [] : {};
+  return Object.keys(obj).reduce((inobj, key) => {
+    if (typeof obj[key] === "object") {
+      inobj[key] = reduceDeepCopy(obj[key]);
+    } else {
+      inobj[key] = obj[key];
+    }
+    return inobj;
+  }, newObj);
+};
+let obj = {
+  a: 1,
+  b: 2,
+  c: {
+    c: 1,
+    d: 2,
+  },
+};
+// console.log(reduceDeepCopy(obj));
+
+//寄生组合式继承
+/**
+ * 
+ * @param {*} value 
+ * 核心问题：传统继承的缺陷
+组合继承的问题：
+组合继承通过 Parent.call(this) 继承实例属性，通过 Child.prototype = new Parent() 继承原型方法。但这种方式会调用两次父类构造函数：
+一次是在创建子类原型时（new Parent()）
+一次是在子类构造函数内部（Parent.call(this)）
+导致父类的实例属性被重复定义（原型上有一份，实例上又有一份），造成冗余。
+原型链继承的问题：
+直接让 Child.prototype = Parent.prototype 会导致子类原型和父类原型指向同一个对象，修改子类原型会污染父类原型。
+寄生组合式继承的解决方案
+核心思路是：只调用一次父类构造函数，同时保持原型链的完整性。
+
+实现步骤：
+
+继承实例属性：通过 Parent.call(this, ...args) 在子类构造函数中调用父类构造函数，继承父类的实例属性（同组合继承）。
+继承原型方法：
+不直接使用 new Parent() 创建子类原型（避免二次调用父类构造函数），而是通过 Object.create(Parent.prototype) 创建一个父类原型的副本作为子类原型。
+手动修正子类原型的 constructor 指向（指向子类自身），保证原型链正确。
+ */
+
+function Parent(value) {
+  this.a = value;
+}
+Parent.prototype.getValue = function () {
+  console.log(this.val);
+};
+function Child(value1, value2) {
+  Parent.call(this, value1);
+  this.b = value2;
+}
+// 将child的原型指向parent的原型
+//第二个参数将child的constructor指向child的自身
+Child.prototype = Object.create(Parent.prototype, {
+  constructor: {
+    value: Child,
+    enumerable: false,
+    writable: true,
+    configurable: true,
+  },
+});
+
+Child.prototype[Symbol.toStringTag] = "Child.prototype";
+// Child.prototype[Symbol.toStringTag] 是用于自定义对象的 toString () 行为的特殊属性，它会影响 Object.prototype.toString.call() 对该对象的类型描述。
+Parent.prototype[Symbol.toStringTag] = "Parent.prototype";
+// console.log(Child.prototype.constructor);
+// console.log(Parent.prototype.constructor(1));
+// console.log(global.a);
+
+// 发布订阅
+/**
+ * 事件发布订阅模式
+ * 1. on(name, fn) 订阅事件
+ * 2. off(name, fn) 取消订阅事件
+ * 3. emit(name, ...args) 发布事件
+ */
+class EventEmiter {
+  constructor() {
+    this.arr = [];
+  }
+  on(name, fn) {
+    if (this.arr[name]) {
+      this.arr[name].push(fn);
+    } else {
+      this.arr[name] = [fn];
+    }
+  }
+  off(name, fn) {
+    const inFn = this.arr[name];
+    if (inFn) {
+      if (fn) {
+        const index = inFn.indexOf(fn);
+        inFn.splice(index, 1);
+      } else {
+        const index = this.arr.indexOf(inFn);
+        this.arr.splice(index, 1);
+      }
+    } else {
+      console.log("没有这个事件");
+    }
+  }
+  emit(name, ...arr) {
+    const inFn = this.arr[name];
+    if (inFn) {
+      inFn.forEach((fn) => fn(...arr));
+    } else {
+      console.log("没有这个事件");
+    }
+  }
+}
+let eventsBus = new EventEmiter();
+let fn1 = function (name, age) {
+  console.log(name, age);
+};
+let fn2 = function (name, age) {
+  console.log("fn", name, age);
+};
+eventsBus.on("test", fn1);
+eventsBus.on("test", fn2);
+eventsBus.emit("test", "Jason", 18);
