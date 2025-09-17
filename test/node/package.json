@@ -2,5 +2,21 @@
   "name": "node.dev",
   "version": "0.0.0",
   "type": "module",
-  "main": "/src/index.js"
+  "main": "/src/index.js",
+  "devDependencies": {
+    "@babel/cli": "^7.28.3",
+    "@babel/core": "^7.28.4",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/plugin-transform-regenerator": "^7.28.4",
+    "@babel/preset-env": "^7.28.3",
+    "core-js": "^3.45.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "babel-build": "babel src --out-dir dist",
+    "babel-watch": "babel src --out-dir dist --watch"
+  }
 }

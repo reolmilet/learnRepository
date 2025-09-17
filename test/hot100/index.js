@@ -45,7 +45,7 @@ const data = [
     ],
   },
 ];
-// console.log(treeToList(data));
+console.log(treeToList(data));
 // 列表转成树形结构
 
 let arr = [
@@ -199,6 +199,26 @@ Array.prototype.mymap = function (callback) {
   return result;
 };
 // console.log([2, 4, 66, 7, , , ,].mymap((item) => item * 2));
+const arrobj = {
+  prefix: "Item:",
+  processItems(items) {
+    // 用普通函数作为 forEach 回调
+    console.log("普通函数回调：");
+    items.mymap(function (item) {
+      // this 指向全局对象，无法访问 obj 的 prefix
+      console.log(`${this.prefix} ${item}`); // 输出：undefined 1（等）
+    });
+
+    // 用箭头函数作为 forEach 回调
+    console.log("箭头函数回调：");
+    items.mymap((item) => {
+      // this 继承自 processItems 的 this（即 obj），可正常访问 prefix
+      console.log(`${this.prefix} ${item}`); // 输出：Item: 1（等）
+    });
+  },
+};
+
+arrobj.processItems([1, 2, 3]);
 
 //获取路径
 function _get(obj, path, defaultValue = "undefined") {
@@ -375,3 +395,46 @@ let fn2 = function (name, age) {
 eventsBus.on("test", fn1);
 eventsBus.on("test", fn2);
 eventsBus.emit("test", "Jason", 18);
+
+const json = {
+  a: {
+    b: {
+      c: 1,
+    },
+  },
+  d: {
+    e: 2,
+  },
+  f: {
+    g: 3,
+  },
+  h: 4,
+  i: {
+    j: 6,
+    k: 7,
+  },
+};
+const jsonToFlat = function (json, oldkey) {
+  let result = {};
+
+  for (let key in json) {
+    let newkey = oldkey ? `${oldkey}.${key}` : key;
+
+    if (typeof json[key] === "object") {
+      const res = jsonToFlat(json[key], newkey);
+      result = { ...result, ...res };
+    } else {
+      result[newkey] = json[key];
+    }
+  }
+  return result;
+};
+// console.log(jsonToFlat(json));
+// {
+//   "a.b.c": 1,
+//   "d.e": 2,
+//   "f.g": 3,
+//   "h": 4,
+//   "i.j": 6,
+//   "i.k": 7
+// }

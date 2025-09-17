@@ -524,15 +524,67 @@ const search = (nums, target) => {
   return -1;
 };
 
-console.log(
-  searchMatrix(
-    (matrix = [
-      [1, 4, 7, 11, 15],
-      [2, 5, 8, 12, 19],
-      [3, 6, 9, 16, 22],
-      [10, 13, 14, 17, 24],
-      [18, 21, 23, 26, 30],
-    ]),
-    5
-  )
-);
+// console.log(
+//   searchMatrix(
+//     (matrix = [
+//       [1, 4, 7, 11, 15],
+//       [2, 5, 8, 12, 19],
+//       [3, 6, 9, 16, 22],
+//       [10, 13, 14, 17, 24],
+//       [18, 21, 23, 26, 30],
+//     ]),
+//     5
+//   )
+// );
+
+/**
+ * @param {string} s
+ * @return {boolean}
+ *
+
+测试结果
+20. 有效的括号
+ */
+var isValid = function (s) {
+  if (s.length % 2 == 1) {
+    return false;
+  }
+  const mymap = new Map([
+    [")", "("],
+    ["]", "["],
+    ["}", "{"],
+  ]);
+  const arr = [];
+  for (let i of s) {
+    if (mymap.has(i)) {
+      if (arr.length && arr[arr.length - 1] === mymap.get(i)) {
+        arr.pop();
+        continue;
+      } else {
+        console.log("else");
+        return false;
+      }
+    }
+    arr.push(i);
+  }
+  if (arr.length !== 0) {
+    return false;
+  }
+  return true;
+};
+
+console.log(isValid("()"));
+
+var copyRandomList = function (head, cachedNode = new Map()) {
+  if (head === null) {
+    return null;
+  }
+  if (!cachedNode.has(head)) {
+    cachedNode.set(head, { val: head.val }),
+      Object.assign(cachedNode.get(head), {
+        next: copyRandomList(head.next, cachedNode),
+        random: copyRandomList(head.random, cachedNode),
+      });
+  }
+  return cachedNode.get(head);
+};

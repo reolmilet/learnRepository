@@ -1,2 +1,10 @@
-const test = { add: function (a, b) { return a + b; } };
-console.log(test['add'][(1, 2)]);
+async function test() {
+  await new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve();
+      console.log("test");
+    }, 1000);
+  });
+}
+test();
+console.log("test2");

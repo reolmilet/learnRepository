@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div class="app">
+      <div id="container">
+        111111
+        <button click="stopPropagation">点击我</button>
+      </div>
+      <!-- <div class="mid"></div> -->
+      <!-- <span style="display: inline-block"></span> -->
+      <div class="bottomContainer">222222</div>
+      <span style="margin-right: 20px">233223</span>
+      <span style="margin-left: 20px">233223</span>
+    </div>
+  </body>
+  <style>
+    .app {
+    }
+    #container {
+      background-color: blanchedalmond;
+      width: 50px;
+      height: 50px;
+      margin-bottom: 50px;
+      overflow: hidden;
+    }
+    .bottomContainer {
+      background-color: rgb(243, 0, 0);
+      width: 50px;
+      height: 50px;
+      margin-top: 50px;
+    }
+  </style>
+  <script>
+    function stopPropagation(e) {
+      alert("点击了按钮");
+    }
+    window.addEventListener("click", (e) => {
+      console.log("windowONclick", "冒泡");
+    });
+    document.addEventListener("click", (e) => {
+      console.log("documentONclick", "冒泡");
+    });
+    const container = document.querySelector("#container");
+    container.addEventListener("click", (e) => {
+      console.log("containerONclick", "冒泡");
+    });
+    document.querySelector(".app").addEventListener("click", (e) => {
+      console.log("appONclick", "冒泡");
+    });
+
+    const btn = document.querySelector("button");
+    btn.addEventListener("click", () => {
+      console.log("冒泡点击了按钮");
+    });
+    window.addEventListener(
+      "click",
+      (e) => {
+        e.stopPropagation();
+        console.log("windowONclick", "捕获");
+      },
+      {
+        capture: true,
+        passive: true,
+      }
+    );
+    document.addEventListener(
+      "click",
+      (e) => {
+        console.log("documentONclick", "捕获");
+      },
+      {
+        capture: true,
+      }
+    );
+    container.addEventListener(
+      "click",
+      (e) => {
+        console.log("containerONclick", "捕获");
+      },
+      {
+        capture: true,
+      }
+    );
+    document.querySelector(".app").addEventListener(
+      "click",
+      (e) => {
+        console.log("appONclick", "捕获");
+      },
+      {
+        capture: true,
+      }
+    );
+
+    btn.addEventListener("click", () => {
+      console.log("捕获点击了按钮");
+    });
+  </script>
+</html>

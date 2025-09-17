@@ -21,9 +21,32 @@ function strAdd(str1, str2) {
   }
   return result.join("");
 }
+console.log(strAdd.length);
 // console.log(strAdd("11", "99"));
 // output: '2'
 // input: strAdd('11', '99')
 // output: '110'
 // input: strAdd('11', '999999999999999999')
 
+const obj = {
+  name: "Object",
+  regularMethod: function () {
+    console.log("Regular method this:", this); // 指向 obj
+  },
+  arrowMethod: () => {
+    console.log("Arrow method this:", this); // 继承自外层作用域，通常是全局对象或 undefined（严格模式）
+  },
+};
+
+// obj.regularMethod(); // 输出: Regular method this: { name: 'Object', regularMethod: [Function], arrowMethod: [Function] }
+// obj.arrowMethod(); // 输出: Arrow method this: Window（浏览器环境）或 global（Node.js 环境）
+function add(a) {
+  let b = a;
+  function add2(a) {
+    b = b + 1;
+  }
+}
+const a = new add(1);
+const b = new add(2);
+a.add2();
+b.add2();
