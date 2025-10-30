@@ -45,7 +45,7 @@ const data = [
     ],
   },
 ];
-console.log(treeToList(data));
+// console.log(treeToList(data));
 // 列表转成树形结构
 
 let arr = [
@@ -97,7 +97,7 @@ const newarr = [1, 2, [3, 4, [5, 6]]];
 // instanceof
 function myInstanceof(left, right) {
   let ptoto = Object.getPrototypeOf(left);
-  console.log(ptoto, "ptoto");
+  // console.log(ptoto, "ptoto");
   while (true) {
     if (ptoto === null) return false;
     if (ptoto === right.prototype) return true;
@@ -117,6 +117,7 @@ Function.prototype._mycall = function (content, ...arrs) {
   delete content.fn;
   return res;
 };
+
 // 同理
 Function.prototype._myapply = (thisArg, args = []) => {
   thisArg =
@@ -218,7 +219,7 @@ const arrobj = {
   },
 };
 
-arrobj.processItems([1, 2, 3]);
+// arrobj.processItems([1, 2, 3]);
 
 //获取路径
 function _get(obj, path, defaultValue = "undefined") {
@@ -394,7 +395,7 @@ let fn2 = function (name, age) {
 };
 eventsBus.on("test", fn1);
 eventsBus.on("test", fn2);
-eventsBus.emit("test", "Jason", 18);
+// eventsBus.emit("test", "Jason", 18);
 
 const json = {
   a: {
@@ -438,3 +439,51 @@ const jsonToFlat = function (json, oldkey) {
 //   "i.j": 6,
 //   "i.k": 7
 // }
+
+// 使用proxy实现数组的负数取值
+const proxyArr = [1, 2, 3, 4, 5];
+const proxy = new Proxy(proxyArr, {
+  get(target, prop) {
+    if (prop < 0) {
+      return target[target.length + parseInt(prop)];
+    }
+  },
+});
+console.log(proxy[-1], "111");
+
+const flotArr = [1, 2, 3, [4, 5, [6, 7]]];
+
+function Myflot(arr) {
+  const res = [];
+  if (!Array.isArray(arr)) return;
+  arr.forEach((item) => {
+    if (Array.isArray(item)) {
+      res.push(...Myflot(item));
+    } else {
+      res.push(item);
+    }
+  });
+}
+
+// 用户会胡乱的输入一些英文字符，譬如”aaabbbbbbbbccdddddaee”，希望前端将这些字符压缩后提交到后端，压缩后形如”a3b8c2d5ae2”，请完成code的部分
+// const str = "aaabbbbbbbbccdddddaee";
+// function compress(str) {
+//   const strArr = new Array(str);
+//   // strArr.array.map((element) => {
+//   //   console.log(element);
+//   // });
+//   // code
+// }
+// compress(str);
+const arr4 = [5, 6, 7, 8, 9];
+const arr5 = arr4.splice(1, 2, 3, 4, 5);
+const arr6 = arr4.slice(1, 3);
+console.log(arr4, arr5, arr6);
+
+String.split();
+// 分割字符串,数组不存在这个方法
+String.slice();
+// 切割字符串
+
+Array.splice();
+// 替换数组的元素

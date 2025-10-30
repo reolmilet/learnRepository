@@ -588,3 +588,80 @@ var copyRandomList = function (head, cachedNode = new Map()) {
   }
   return cachedNode.get(head);
 };
+
+//108. 将有序数组转换为二叉搜索树
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {number[]} nums
+ * @return {TreeNode}
+ */
+var sortedArrayToBST = function (nums) {
+  const half = Math.floor(nums.length / 2);
+  const left = nums.slice(0, half);
+  const right = nums.slice(half + 1);
+  const node = new TreeNode(
+    nums[half],
+    sortedArrayToBST([left]),
+    sortedArrayToBST([right])
+  );
+  return node;
+};
+
+function TreeNode(val, left, right) {
+  this.val = val === undefined ? 0 : val;
+  this.left = left === undefined ? null : left;
+  this.right = right === undefined ? null : right;
+}
+
+/**
+ * @param {TreeNode} root
+ * @param {number} k
+ * @return {number}
+ */
+var kthSmallest = function (root, k) {
+  function deepSearch(node, count = 0) {
+    if (node.val === null) {
+      return null;
+    }
+    deepSearch(node.left, count);
+    count++;
+    deepSearch(node.right, count);
+    if (count === k) {
+      return node.val;
+    }
+  }
+};
+const node2 = new TreeNode(2);
+const node1 = new TreeNode(1, null, node2);
+const node4 = new TreeNode(4);
+const root = new TreeNode(3, node1, node4);
+// console.log("测试用例 1: k=1，预期结果 1 =>", kthSmallest(root, 1));
+function BFCbinaryTree(root) {
+  const quary = [root];
+  const res = [];
+  while (quary.length > 0) {
+    const quaryLength = quary.length;
+    const tire = [];
+    for (let i = 0; i < quaryLength; i++) {
+      const current = quary.shift();
+      tire.push(current.val);
+      if (current.left) quary.push(current.left);
+      if (current.right) quary.push(current.right);
+    }
+    res.push(tire);
+  }
+  return res;
+}
+console.log(BFCbinaryTree(node1));
+/**
+ * @param {TreeNode} root
+ * @return {number[]}
+ */
+var rightSideView = function (root) {};

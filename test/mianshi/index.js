@@ -46,31 +46,50 @@ const packages = {
 
 function check(packages) {
   const visited = {};
-  function dfs(package) {
-    console.log(package, "package");
-    if (visited[package] === 1) {
+  
+  function dfs(packageName) {
+    // 若已在访问中，说明存在循环
+    if (visited[packageName] === 1) {
       return true;
     }
-    if (visited[package] === 2) {
+    // 若已访问完毕，无需重复检查
+    if (visited[packageName] === 2) {
       return false;
     }
-    visited[package] = 1;
-    const currentPackage = packages[package];
+    
+    // 标记为“访问中”
+    visited[packageName] = 1;
+    
+    // 处理依赖的包不存在的情况
+    const currentPackage = packages[packageName];
     if (!currentPackage) {
-      // 若包不存在，直接标记为已访问，避免无效递归
-      visited[packageName] = 2;
+      visited[packageName] = 2; // 标记为已访问（无效包）
       return false;
     }
-
-    for (const i of packages[package].dependencies) {
-      if (dfs(i)) return true;
+    
+    // 遍历依赖并递归检测
+    for (const dep of currentPackage.dependencies) {
+      if (dfs(dep)) {
+        return true; // 发现循环，立即返回
+      }
     }
-    visited[package] = 2;
+    
+    // 所有依赖遍历完毕，标记为“已访问”
+    visited[packageName] = 2;
     return false;
   }
-  for (const i of Object.keys(packages)) {
-    if (dfs(i)) return true;
+  
+  // 检查所有包
+  for (const packageName of Object.keys(packages)) {
+    if (dfs(packageName)) {
+      return true; // 存在循环依赖
+    }
   }
-  return false;
+  
+  return false; // 无循环依赖
 }
-console.log(check(packages));
+
+
+
+console.log(check(packages)); // 输出 true（正确检测到循环）
+

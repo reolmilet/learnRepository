@@ -1,51 +1,51 @@
 
-class _LazyMan {
-    queue: any[] = [];
-    name: string;
-    constructor(name) {
-      this.name = name
-      this.sayName(name)
-      Promise.resolve().then(() => {
-        let sequence = Promise.resolve()
-        this.queue.forEach(item => {
-          sequence = sequence.then(item)
-        })
-      })
-    }
+// class _LazyMan {
+//     queue: any[] = [];
+//     name: string;
+//     constructor(name) {
+//       this.name = name
+//       this.sayName(name)
+//       Promise.resolve().then(() => {
+//         let sequence = Promise.resolve()
+//         this.queue.forEach(item => {
+//           sequence = sequence.then(item)
+//         })
+//       })
+//     }
   
-    sayName(name) {
-      this.queue.push(() => {
-        console.log(`Hi! this is ${name}!`)
-      })
-      return this
-    }
+//     sayName(name) {
+//       this.queue.push(() => {
+//         console.log(`Hi! this is ${name}!`)
+//       })
+//       return this
+//     }
   
-    eat(meal) {
-      this.queue.push(() => {
-        console.log(`eat ${meal}`)
-      })
-      return this
-    }
+//     eat(meal) {
+//       this.queue.push(() => {
+//         console.log(`eat ${meal}`)
+//       })
+//       return this
+//     }
   
-    _holdOn(time) {
-      return () => new Promise(resolve => {
-        setTimeout(() => {
-          console.log(`Wake up after ${time} second`)
-          resolve()
-        }, time * 1000)
-      })
-    }
+//     _holdOn(time) {
+//       return () => new Promise(resolve => {
+//         setTimeout(() => {
+//           console.log(`Wake up after ${time} second`)
+//           resolve()
+//         }, time * 1000)
+//       })
+//     }
   
-    sleep(time) {
-      this.queue.push(this._holdOn(time))
-      return this
-    }
+//     sleep(time) {
+//       this.queue.push(this._holdOn(time))
+//       return this
+//     }
   
-    sleepFirst(time) {
-      this.queue.unshift(this._holdOn(time))
-      return this
-    }
-  }
+//     sleepFirst(time) {
+//       this.queue.unshift(this._holdOn(time))
+//       return this
+//     }
+//   }
   
 //   const LazyMan = (name: string) => new _LazyMan(name);
   
@@ -54,4 +54,26 @@ class _LazyMan {
   
   // 参考文章：https://github.com/fi3ework/blog/issues/36
 
+
+
+  // 使用proxy实现数组的负数取值
+const proxyArr:Array<number> = [1, 2, 3, 4, 5];
+const proxy = new Proxy(proxyArr, {
+  get(target, prop:string) {
+    if (Number(prop) < 0) {
+      return target[target.length + parseInt(prop)];
+    }
+  },
+});
+// console.log(proxy[-1], "111");
     
+
+
+function myindexOf(str1: string, str2: string) {
+  const [short,long] = str1.length < str2.length ? [str1, str2] : [str2, str1];
+ console.log(short,long)
+  
+}
+myindexOf('abc', 'abcd');
+
+
